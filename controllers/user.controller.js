@@ -31,7 +31,8 @@ const userPost = async(req, res = response) => {
 
 
     res.json({
-        user
+        username = user.username,
+        _id = user._id 
     })
 
 
