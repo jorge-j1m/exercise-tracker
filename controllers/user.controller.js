@@ -9,7 +9,7 @@ const userGet = async(req = request, res = response) => {
     
     // TODO: USER GET
 
-    const users = await User.find()
+    const users = await User.find([])
 
     console.log(users);
 
@@ -30,10 +30,7 @@ const userPost = async(req, res = response) => {
     await user.save()
 
 
-    res.json({
-        username = user.username,
-        _id = user._id 
-    })
+    res.json({user})
 
 
 }
