@@ -8,13 +8,25 @@ const User = require('../models/user');
 const userGet = async(req = request, res = response) => {
 
     
-    // USER GET
+    // TODO: USER GET
 
 }
 
-const usuariosPost = async(req, res = response) => {
+const userPost = async(req, res = response) => {
     
-    // USER POST
+    // TODO: USER POST
+
+    const username = req.body.username;    
+
+    const user = new User({username});
+
+    user.save()
+
+
+    res.json({
+        user
+    })
+
 
 }
 
@@ -22,6 +34,6 @@ const usuariosPost = async(req, res = response) => {
 
 
 module.exports = {
-    usuariosGet,
-    usuariosPost,
+    userGet,
+    userPost
 }
