@@ -9,7 +9,7 @@ const userGet = async(req = request, res = response) => {
     
     // TODO: USER GET
 
-    const users = await User.find([])
+    const users = await User.find().select('-__v')
 
     console.log(users);
 
