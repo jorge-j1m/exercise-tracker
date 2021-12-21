@@ -1,9 +1,6 @@
 const { response, request } = require('express');
-const user = require('../models/user');
-
-
 const User = require('../models/user');
-
+const Exercise = require("../models/exercise");
 
 
 const userGet = async(req = request, res = response) => {
@@ -35,9 +32,49 @@ const userPost = async(req, res = response) => {
 }
 
 
+const exercisesPost = async (req = request, res = response)=>{
+
+
+    let {description, duration, date} = req.body;
+
+
+
+
+    if(date){
+        date = new Date(date)
+    }else{
+        date = new Date();
+    }
+
+    const user = await User.findById(req.params.id)
+    
+
+    const exercise = new Exercise({userID: req.params.id ,description, duration, date, })
+
+    await exercise.save();
+
+    
+
+    res.json({
+        username: user.username,
+        description: exercise.description,
+        duration: exercise.duration,
+        date: exercise.date.toDateString(),
+        _id: user._id
+    })
+
+
+
+
+
+}
+
+
+
 
 
 module.exports = {
     userGet,
-    userPost
+    userPost,
+    exercisesPost
 }
