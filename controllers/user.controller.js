@@ -50,7 +50,7 @@ const exercisesPost = async (req = request, res = response) => {
 };
 
 const logsGet = async (req = request, res = response) => {
-  let { from , to , limit } = req.query;
+  let { from = "1970-01-01", to = Date(), limit } = req.query;
 
   
   from = new Date(from);
