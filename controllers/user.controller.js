@@ -50,23 +50,21 @@ const exercisesPost = async (req = request, res = response) => {
 };
 
 const logsGet = async (req = request, res = response) => {
-  //let { from = "1970-01-01", to = Date(), limit } = req.query;
+  let { from = "1970-01-01", to = Date(), limit } = req.query;
 
-  //from = new Date(from);
-  //to = new Date(to);
+  from = new Date(from);
+  to = new Date(to);
 
-  let exercises = await Exercise.find({ userID: req.params.id })
-  // .filter(
-  //   (element) => {
-  //     fecha = new Date(element.date)
-  //     console.log(`from: ${from} ; to: ${to} ; fecha: ${fecha}`);
-  //     if (fecha > from && fecha < to) {
-  //       return element;
-  //     }
-  //   }
-  // );
+  let exercises = await(await Exercise.find({ userID: req.params.id })).filter((element) => {
+      fecha = new Date(element.date)
+      console.log(`from: ${from} ; to: ${to} ; fecha: ${fecha}`);
+      if (fecha > from && fecha < to) {
+        return element;
+      }
+    }
+  );
   const count = exercises.length;
-  //exercises = exercises.slice(parseInt(limit));
+  exercises = exercises.slice(parseInt(limit));
 
   const user = await User.findById(req.params.id);
 
