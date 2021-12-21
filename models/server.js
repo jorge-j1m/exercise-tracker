@@ -1,67 +1,54 @@
-const express = require('express');
-const cors = require('cors');
-
-const { dbConnection } = require('../database/config');
-const bodyParser = require('body-parser');
-const { urlencoded } = require('body-parser');
+const express = require("express");
+const cors = require("cors");
+const { dbConnection } = require("../database/config");
+const bodyParser = require("body-parser");
 
 class Server {
+  constructor() {
+    this.app = express();
+    this.port = process.env.PORT;
 
-    constructor() {
-        this.app  = express();
-        this.port = process.env.PORT;
+    this.paths = {
+      users: "/api/users",
+    };
 
-        this.paths = {
-            users: "/api/users"
-        }
+    // Conectar a base de datos
+    this.conectarDB();
 
+    // Middlewares
+    this.middlewares();
 
-        // Conectar a base de datos
-        this.conectarDB();
+    // Rutas de mi aplicación
+    this.routes();
+  }
 
-        // Middlewares
-        this.middlewares();
+  async conectarDB() {
+    await dbConnection();
+  }
 
-        // Rutas de mi aplicación
-        this.routes();
-    }
+  middlewares() {
+    // CORS
+    this.app.use(cors());
 
-    async conectarDB() {
-        await dbConnection();
-    }
+    // Lectura y parseo del body
+    this.app.use(express.json());
 
+    // BodyParser
+    this.app.use(bodyParser.urlencoded({ extended: true }));
 
-    middlewares() {
+    // Directorio Público
+    this.app.use(express.static("public"));
+  }
 
-        // CORS
-        this.app.use( cors() );
+  routes() {
+    this.app.use(this.paths.users, require("../routes/user.routes"));
+  }
 
-        // Lectura y parseo del body
-        this.app.use( express.json() );
-
-        // BodyParser
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-
-        // Directorio Público
-        this.app.use( express.static('public') );
-
-    }
-
-    routes() {
-        
-        this.app.use( this.paths.users, require("../routes/user.routes"));
-        
-    }
-
-    listen() {
-        this.app.listen( this.port, () => {
-            console.log('Servidor corriendo en puerto', this.port );
-        });
-    }
-
+  listen() {
+    this.app.listen(this.port, () => {
+      console.log("Servidor corriendo en puerto", this.port);
+    });
+  }
 }
-
-
-
 
 module.exports = Server;
