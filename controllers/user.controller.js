@@ -3,7 +3,6 @@ const User = require("../models/user");
 const Exercise = require("../models/exercise");
 
 const userGet = async (req = request, res = response) => {
-
   const users = await User.find().select("-__v");
 
   console.log(users);
@@ -12,7 +11,6 @@ const userGet = async (req = request, res = response) => {
 };
 
 const userPost = async (req, res = response) => {
-
   const username = req.body.username;
 
   const user = new User({ username });
@@ -51,27 +49,30 @@ const exercisesPost = async (req = request, res = response) => {
   });
 };
 
-const logsGet = async (req = request, res = response)=>{
-
-  const exercises = await Exercise.find({userID: req.params.id});
+const logsGet = async (req = request, res = response) => {
+  const exercises = await Exercise.find({ userID: req.params.id });
 
   const user = await User.findById(req.params.id);
 
-
-  console.log(exercises);
-  console.log(user);
+  const log = exercises.map((exercise) => {
+    return {
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date.toDateString(),
+    };
+  });
 
   res.json({
-    msg: "endpoint working"
-  })
-
-}
-
-
+    username: user.username,
+    count: exercises.length,
+    _id: user._id,
+    log
+  });
+};
 
 module.exports = {
   userGet,
   userPost,
   exercisesPost,
-  logsGet
+  logsGet,
 };
